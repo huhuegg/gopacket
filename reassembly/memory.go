@@ -192,7 +192,6 @@ func (p *StreamPool) getConnection(k key, end bool, ts time.Time, tcp *layers.TC
 	s := p.factory.New(k[0], k[1], tcp, ac)
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	conn, half, rev = p.newConnection(k, s, ts)
 	conn2, half2, rev2 := p.getHalf(k)
 	if conn2 != nil {
 		if conn2.key != k {
@@ -201,6 +200,7 @@ func (p *StreamPool) getConnection(k key, end bool, ts time.Time, tcp *layers.TC
 		// FIXME: delete s ?
 		return conn2, half2, rev2
 	}
+	conn, half, rev = p.newConnection(k, s, ts)
 	p.conns[k] = conn
 	return conn, half, rev
 }
